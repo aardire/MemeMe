@@ -218,6 +218,7 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         }
         
         dismiss(animated: true, completion: nil)
+        self.navigationController!.popToRootViewController(animated: true)
     }
     
     
