@@ -13,11 +13,13 @@ class SentMemesTableViewController: UITableViewController {
     // MARK: Properties
     var memes: [Meme]!
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        memes = (UIApplication.shared.delegate as! AppDelegate).memes
+    }
     
     override func viewDidLoad() {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        memes = appDelegate.memes
-        
+        super.viewDidLoad()
         
     }
     

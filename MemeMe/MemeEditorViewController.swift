@@ -19,6 +19,7 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     @IBOutlet weak var textFieldTop: UITextField!
     @IBOutlet weak var textFieldBottom: UITextField!
     @IBOutlet weak var shareButton: UIBarButtonItem!
+    @IBOutlet weak var cancelButton: UIBarButtonItem!
     
     
     // MARK: generateMemedImage
@@ -215,6 +216,8 @@ UINavigationControllerDelegate, UITextFieldDelegate {
                 let appDelegate = object as! AppDelegate
                 appDelegate.memes.append(newMeme)
         }
+        
+        dismiss(animated: true, completion: nil)
     }
     
     
