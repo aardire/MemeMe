@@ -17,6 +17,8 @@ class SentMemesTableViewController: UITableViewController {
     override func viewDidLoad() {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memes
+        
+        
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -29,7 +31,7 @@ class SentMemesTableViewController: UITableViewController {
         
         //TODO: return a custom cell ; CustomeMemeCell
         
-        let cell = tableView.dequeueReusableCell(withIdentifier: "SentMemeTableView")!
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SentMemesTableView")!
         let currentMeme = self.memes[(indexPath as NSIndexPath).row]
         
         // Set the properties
@@ -54,6 +56,7 @@ class SentMemesTableViewController: UITableViewController {
         navigationController!.pushViewController(detailController, animated: true)
         
     }
+    
 
 
 }
