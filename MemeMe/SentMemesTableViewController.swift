@@ -18,5 +18,42 @@ class SentMemesTableViewController: UITableViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         memes = appDelegate.memes
     }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
+        // TODO: return the # of memes in the model array
+        return self.memes.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        //TODO: return a custom cell ; CustomeMemeCell
+        
+        let cell = tableView.dequeueReusableCell(withIdentifier: "SentMemeTableView")!
+        let currentMeme = self.memes[(indexPath as NSIndexPath).row]
+        
+        // Set the properties
+        cell.textLabel?.text = currentMeme.topText
+        cell.detailTextLabel?.text = currentMeme.bottomText
+        cell.imageView?.image = currentMeme.memedImage
+        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // TODO: When Selected, present the DetailView
+        
+        // Grab the DetailVC from Storyboard
+        let detailController = self.storyboard!.instantiateViewController(withIdentifier: "MemeDetailViewController") as! MemeDetailViewController
+        
+        //Populate view controller with data from the selected item
+        detailController.meme = self.memes[(indexPath as NSIndexPath).row]
+        
+        // Present the view controller using navigation
+        navigationController!.pushViewController(detailController, animated: true)
+        
+    }
+
 
 }
