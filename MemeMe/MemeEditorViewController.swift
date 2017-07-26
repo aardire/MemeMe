@@ -11,7 +11,7 @@ import UIKit
 class MemeEditorViewController: UIViewController,UIImagePickerControllerDelegate,
 UINavigationControllerDelegate, UITextFieldDelegate {
 
-    // MARK: Properties
+    // MARK: Properties  
     
     @IBOutlet weak var pickImageView: UIImageView!
     @IBOutlet weak var cameraButton: UIBarButtonItem!
@@ -206,16 +206,15 @@ UINavigationControllerDelegate, UITextFieldDelegate {
                 // Create the meme
                 
                 let newMeme = Meme(topText: self.textFieldTop.text!, bottomText: self.textFieldBottom.text!, originalImage: self.pickImageView.image!, memedImage: memedImage)
-                self.save(newMeme: newMeme)
                 
+                // Add it to the memes array in the Application Delegate
+                let object = UIApplication.shared.delegate
+                let appDelegate = object as! AppDelegate
+                appDelegate.memes.append(newMeme)
         }
     }
     
-    // MARK: save
     
-    func save(newMeme:Meme) {
-        
-    }
     
 }
 
