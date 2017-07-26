@@ -13,7 +13,8 @@ class SentMemesCollectionViewController: UICollectionViewController {
     // MARK: Properties
     var memes: [Meme]!
     
-    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout?
+    @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
+    @IBOutlet weak var addButton: UIBarButtonItem!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

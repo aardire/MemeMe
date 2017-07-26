@@ -12,6 +12,7 @@ class SentMemesTableViewController: UITableViewController {
     
     // MARK: Properties
     var memes: [Meme]!
+    @IBOutlet weak var addButton: UIBarButtonItem!
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -59,6 +60,4 @@ class SentMemesTableViewController: UITableViewController {
         
     }
     
-
-
 }

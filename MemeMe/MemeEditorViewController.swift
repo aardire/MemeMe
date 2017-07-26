@@ -56,14 +56,15 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         super.viewWillAppear(animated)
         subscribeToKeyboardNotifications()
         
-        self.tabBarController?.tabBar.isHidden = true 
+        tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
         unsubscribeFromKeyboardNotifications()
-        self.tabBarController?.tabBar.isHidden = false
+        
+        
     }
     
     // MARK: viewDidLoad
@@ -207,21 +208,30 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         
         activityController.completionWithItemsHandler =
             { (activityType, completed, returnedItems, error) in
-                // Create the meme
-                
-                let newMeme = Meme(topText: self.textFieldTop.text!, bottomText: self.textFieldBottom.text!, originalImage: self.pickImageView.image!, memedImage: memedImage)
-                
-                // Add it to the memes array in the Application Delegate
-                let object = UIApplication.shared.delegate
-                let appDelegate = object as! AppDelegate
-                appDelegate.memes.append(newMeme)
-        }
-        
-        dismiss(animated: true, completion: nil)
-        self.navigationController!.popToRootViewController(animated: true)
+               self.save(memedImage: memedImage)
+            }
     }
     
+    func save(memedImage: UIImage) {
+        // Create the meme
+        
+        let newMeme = Meme(topText: self.textFieldTop.text!, bottomText: self.textFieldBottom.text!, originalImage: self.pickImageView.image!, memedImage: memedImage)
+        
+        // Add it to the memes array in the Application Delegate
+        let object = UIApplication.shared.delegate
+        let appDelegate = object as! AppDelegate
+        appDelegate.memes.append(newMeme)
+    }
     
+    // Activity Controller
+
+
+    @IBAction func startOver() {
+        if let navigationController = navigationController {
+            navigationController.popToRootViewController(animated: true)
+        }
+        tabBarController?.tabBar.isHidden = false
+    }
     
 }
 
