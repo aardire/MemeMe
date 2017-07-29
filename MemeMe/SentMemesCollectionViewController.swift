@@ -18,7 +18,9 @@ class SentMemesCollectionViewController: UICollectionViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        memes = (UIApplication.shared.delegate as! AppDelegate).memes
+        let object = UIApplication.shared.delegate
+        let appDelegate = object as! AppDelegate
+        memes = appDelegate.memes
     }
     
     override func viewDidLoad() {

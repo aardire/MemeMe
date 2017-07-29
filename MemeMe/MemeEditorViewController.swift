@@ -42,44 +42,41 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     }
     
     func configureBars(_ input:Bool) {
+        
         self.navigationController?.isNavigationBarHidden = input
         self.navigationController?.isToolbarHidden = input
-        
+
     }
     
     // MARK: viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
+        
+       // super.viewWillAppear(animated)
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
+        self.navigationController?.tabBarController?.tabBar.isHidden = true
         
-        shareButton.isEnabled = (pickImageView.image != nil)
-        
-        super.viewWillAppear(animated)
-        subscribeToKeyboardNotifications()
-        
-        tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
-        unsubscribeFromKeyboardNotifications()
-        
-        
+        self.navigationController?.tabBarController?.tabBar.isHidden = false
     }
     
     // MARK: viewDidLoad
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         //top
         
         configureText(textField: textFieldTop, defaultText: "TOP")
+        shareButton.isEnabled = (pickImageView.image != nil)
         
         //bottom
         
         configureText(textField: textFieldBottom, defaultText: "BOTTOM")
-        
     }
     
     // MARK: configureText
@@ -118,20 +115,23 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            pickImageView.image = image
+            self.pickImageView.image = image
+            self.shareButton.isEnabled = true
+            dismiss(animated: true, completion: nil)
         }
-        
-        dismiss(animated: true, completion: nil)
     }
     
     // MARK: imagePickerControllerDidCancel
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        
         dismiss(animated: true, completion: nil)
     }
+    
     
     //MARK: textfieldShouldReturn
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
         textField.resignFirstResponder()
         return true
     }
@@ -208,29 +208,34 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         
         activityController.completionWithItemsHandler =
             { (activityType, completed, returnedItems, error) in
-               self.save(memedImage: memedImage)
-            }
+                if completed {
+                    self.save(memedImage: memedImage)
+                    
+                    // once completed immeditely bring back to root view
+                    if let navigationController = self.navigationController {
+                        navigationController.popToRootViewController(animated: true)
+                    }
+                }
+        }
     }
+
+    func save(memedImage:UIImage) {
+        // Create the meme to be shared
     
-    func save(memedImage: UIImage) {
-        // Create the meme
-        
-        let newMeme = Meme(topText: self.textFieldTop.text!, bottomText: self.textFieldBottom.text!, originalImage: self.pickImageView.image!, memedImage: memedImage)
+        let meme = Meme(topText: self.textFieldTop.text!, bottomText: self.textFieldBottom.text!, originalImage: self.pickImageView.image!, memedImage: memedImage)
         
         // Add it to the memes array in the Application Delegate
         let object = UIApplication.shared.delegate
         let appDelegate = object as! AppDelegate
-        appDelegate.memes.append(newMeme)
+        appDelegate.memes.append(meme)
+        
     }
-    
-    // Activity Controller
 
 
     @IBAction func startOver() {
         if let navigationController = navigationController {
             navigationController.popToRootViewController(animated: true)
         }
-        tabBarController?.tabBar.isHidden = false
     }
     
 }
