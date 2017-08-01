@@ -17,9 +17,7 @@ class SentMemesCollectionViewController: UICollectionViewController {
     }
     
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         collectionView?.reloadData()
@@ -27,6 +25,13 @@ class SentMemesCollectionViewController: UICollectionViewController {
     
     override func viewDidLoad() {
        super.viewDidLoad()
+        
+        let space:CGFloat = 3.0
+        let dimension = (self.view.frame.size.width - (2 * space)) / 2.0
+        
+        flowLayout.minimumInteritemSpacing = space
+        flowLayout.minimumLineSpacing = space
+        flowLayout.itemSize = CGSize(width: dimension, height: dimension)
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -44,7 +49,7 @@ class SentMemesCollectionViewController: UICollectionViewController {
         
         // Set the properties for the CustomMemeCell
         cell.memeImageView?.image = currentMeme.memedImage
-        cell.memeLabel.text = "\(currentMeme.topText!) ... \(currentMeme.bottomText!)"
+//        cell.memeLabel.text = "\(currentMeme.topText!) ... \(currentMeme.bottomText!)"
         
         return cell
     }
@@ -64,4 +69,5 @@ class SentMemesCollectionViewController: UICollectionViewController {
         
     }
 
+    
 }

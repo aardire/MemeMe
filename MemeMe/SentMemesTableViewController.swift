@@ -11,8 +11,7 @@ import UIKit
 class SentMemesTableViewController: UITableViewController {
     
     // MARK: Properties
-    @IBOutlet weak var addButton: UIBarButtonItem!
-    
+  
     var memes: [Meme] {
         return (UIApplication.shared.delegate as! AppDelegate).memes
     }
@@ -62,6 +61,5 @@ class SentMemesTableViewController: UITableViewController {
         self.navigationController!.pushViewController(detailController, animated: true)
         
     }
-
 }
 

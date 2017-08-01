@@ -12,6 +12,5 @@ class CustomMemeCell: UICollectionViewCell {
     
     // TODO: Two Labels And An Image 
     @IBOutlet weak var memeImageView: UIImageView!
-    @IBOutlet weak var memeLabel: UILabel!
     
 }

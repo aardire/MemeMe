@@ -22,11 +22,14 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
     @IBOutlet weak var toolbar: UIToolbar!
-    @IBOutlet weak var navBar: UINavigationItem!
+
     
+   
     // MARK: generateMemedImage
-    
-    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+    }
+
     func generateMemedImage() -> UIImage {
         
         // Hide toolbar and navbar
@@ -56,16 +59,16 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         
         super.viewWillAppear(animated)
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
-        navigationController?.tabBarController?.tabBar.isHidden = true
         
         shareButton.isEnabled = (pickImageView.image != nil)
+        
         
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
-        self.navigationController?.tabBarController?.tabBar.isHidden = false
+        
     }
     
     // MARK: viewDidLoad
@@ -236,13 +239,14 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         // Add it to the memes array in the Application Delegate
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.memes.append(meme)
-        print("meme Saved, memes count" + "\(appDelegate.memes.count)")
     }
 
     @IBAction func startOver() {
-        if let navigationController = navigationController {
+        
+        if let navigationController = self.navigationController {
             navigationController.popToRootViewController(animated: true)
         }
+        
     }
    
 }
