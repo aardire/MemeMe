@@ -61,13 +61,14 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         
         shareButton.isEnabled = (pickImageView.image != nil)
-        
-        
+        subscribeToKeyboardNotifications()
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
+        unsubscribeFromKeyboardNotifications()
         
     }
     
@@ -120,8 +121,6 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             self.pickImageView.image = image
-            self.shareButton.isEnabled = true
-            
         }
         dismiss(animated: true, completion: nil)
     }
@@ -243,10 +242,10 @@ UINavigationControllerDelegate, UITextFieldDelegate {
 
     @IBAction func startOver() {
         
+        let nextVC = self.storyboard!.instantiateViewController(withIdentifier: "SentMemes")
         if let navigationController = self.navigationController {
-            navigationController.popToRootViewController(animated: true)
-        }
-        
+            navigationController.pushViewController(nextVC, animated: true)
+    }
     }
    
 }
