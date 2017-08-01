@@ -21,8 +21,11 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     @IBOutlet weak var shareButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
+    @IBOutlet weak var toolbar: UIToolbar!
+    @IBOutlet weak var navBar: UINavigationItem!
     
     // MARK: generateMemedImage
+    
     
     func generateMemedImage() -> UIImage {
         
@@ -43,17 +46,19 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     
     func configureBars(_ input:Bool) {
         
-        self.navigationController?.isNavigationBarHidden = input
-        self.navigationController?.isToolbarHidden = input
+       self.navigationController?.isNavigationBarHidden = input
+       self.toolbar.isHidden = input
 
     }
     
     // MARK: viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         
-       // super.viewWillAppear(animated)
+        super.viewWillAppear(animated)
         cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
-        self.navigationController?.tabBarController?.tabBar.isHidden = true
+        navigationController?.tabBarController?.tabBar.isHidden = true
+        
+        shareButton.isEnabled = (pickImageView.image != nil)
         
     }
     
@@ -69,13 +74,9 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        //top
+        
         
         configureText(textField: textFieldTop, defaultText: "TOP")
-        shareButton.isEnabled = (pickImageView.image != nil)
-        
-        //bottom
-        
         configureText(textField: textFieldBottom, defaultText: "BOTTOM")
     }
     
@@ -117,8 +118,9 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
             self.pickImageView.image = image
             self.shareButton.isEnabled = true
-            dismiss(animated: true, completion: nil)
+            
         }
+        dismiss(animated: true, completion: nil)
     }
     
     // MARK: imagePickerControllerDidCancel
@@ -208,36 +210,41 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         
         activityController.completionWithItemsHandler =
             { (activityType, completed, returnedItems, error) in
-                if completed {
-                    self.save(memedImage: memedImage)
+                if (!completed){
+                    return
+                }
+                else {
+                    self.saveMemedImage(memedImage: memedImage)
+                }
+                self.dismiss(animated: true, completion: nil)
+            
                     
-                    // once completed immeditely bring back to root view
-                    if let navigationController = self.navigationController {
-                        navigationController.popToRootViewController(animated: true)
-                    }
+                // once completed immeditely bring back to root view
+                if let navigationController = self.navigationController {
+                    navigationController.popToRootViewController(animated: true)
                 }
         }
-    }
 
-    func save(memedImage:UIImage) {
-        // Create the meme to be shared
+    }
     
-        let meme = Meme(topText: self.textFieldTop.text!, bottomText: self.textFieldBottom.text!, originalImage: self.pickImageView.image!, memedImage: memedImage)
+
+
+    func saveMemedImage(memedImage: UIImage) {
+        // Create the meme
+        let meme = Meme(topText: textFieldTop.text!, bottomText: textFieldBottom.text!, originalImage: pickImageView.image!, memedImage: memedImage)
         
         // Add it to the memes array in the Application Delegate
-        let object = UIApplication.shared.delegate
-        let appDelegate = object as! AppDelegate
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.memes.append(meme)
-        
+        print("meme Saved, memes count" + "\(appDelegate.memes.count)")
     }
-
 
     @IBAction func startOver() {
         if let navigationController = navigationController {
             navigationController.popToRootViewController(animated: true)
         }
     }
-    
+   
 }
 
 

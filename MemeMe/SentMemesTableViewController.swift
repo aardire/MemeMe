@@ -11,14 +11,15 @@ import UIKit
 class SentMemesTableViewController: UITableViewController {
     
     // MARK: Properties
-    var memes: [Meme]!
     @IBOutlet weak var addButton: UIBarButtonItem!
+    
+    var memes: [Meme] {
+        return (UIApplication.shared.delegate as! AppDelegate).memes
+    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let object = UIApplication.shared.delegate
-        let appDelegate = object as! AppDelegate
-        memes = appDelegate.memes
+        tableView.reloadData()
     }
     
     override func viewDidLoad() {
@@ -61,5 +62,6 @@ class SentMemesTableViewController: UITableViewController {
         self.navigationController!.pushViewController(detailController, animated: true)
         
     }
-    
+
 }
+

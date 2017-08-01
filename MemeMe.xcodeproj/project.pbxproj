@@ -317,6 +317,7 @@
 				85E2BECA1F28D61E00DB43A0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

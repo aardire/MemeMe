@@ -11,16 +11,18 @@ import UIKit
 class SentMemesCollectionViewController: UICollectionViewController {
     
     // MARK: Properties
-    var memes: [Meme]!
+    
+    var memes: [Meme] {
+        return (UIApplication.shared.delegate as! AppDelegate).memes
+    }
     
     @IBOutlet weak var flowLayout: UICollectionViewFlowLayout!
     @IBOutlet weak var addButton: UIBarButtonItem!
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let object = UIApplication.shared.delegate
-        let appDelegate = object as! AppDelegate
-        memes = appDelegate.memes
+        collectionView?.reloadData()
     }
     
     override func viewDidLoad() {
@@ -42,7 +44,7 @@ class SentMemesCollectionViewController: UICollectionViewController {
         
         // Set the properties for the CustomMemeCell
         cell.memeImageView?.image = currentMeme.memedImage
-        cell.memeLabel.text = "\(currentMeme.topText) + \(currentMeme.bottomText)"
+        cell.memeLabel.text = "\(currentMeme.topText!) ... \(currentMeme.bottomText!)"
         
         return cell
     }
@@ -55,10 +57,11 @@ class SentMemesCollectionViewController: UICollectionViewController {
         let detailController = self.storyboard!.instantiateViewController(withIdentifier: "MemeDetailViewController") as! MemeDetailViewController
         
         //Populate view controller with data from the selected item
-        detailController.meme = self.memes[(indexPath as NSIndexPath).row]
+        detailController.meme = self.memes[(indexPath as IndexPath).row]
         
         // Present the view controller using navigation
         self.navigationController!.pushViewController(detailController, animated: true)
         
     }
+
 }
