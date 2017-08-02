@@ -47,6 +47,8 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         return memedImage
     }
     
+    // MARK: configure bars
+    
     func configureBars(_ input:Bool) {
         
        self.navigationController?.isNavigationBarHidden = input
@@ -218,18 +220,12 @@ UINavigationControllerDelegate, UITextFieldDelegate {
                 else {
                     self.saveMemedImage(memedImage: memedImage)
                 }
-                self.dismiss(animated: true, completion: nil)
-            
-                    
-                // once completed immeditely bring back to root view
-                if let navigationController = self.navigationController {
-                    navigationController.popToRootViewController(animated: true)
-                }
-        }
-
-    }
+                
+                self.navigationController?.dismiss(animated: true, completion: nil)
+             }
+      }
     
-
+    // MARK: save meme
 
     func saveMemedImage(memedImage: UIImage) {
         // Create the meme
@@ -239,15 +235,15 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.memes.append(meme)
     }
+    
+    // MARK: Cancel Button
 
-    @IBAction func startOver() {
+    @IBAction func cancel(_ sender: Any) {
         
-        let nextVC = self.storyboard!.instantiateViewController(withIdentifier: "SentMemes")
-        if let navigationController = self.navigationController {
-            navigationController.pushViewController(nextVC, animated: true)
+        self.navigationController?.dismiss(animated: true, completion: nil)
+        
     }
-    }
-   
+    
 }
 
 
