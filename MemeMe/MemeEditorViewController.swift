@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  MemeEditorViewController.swift
 //  MemeMe
 //
 //  Created by Andrew Ardire on 7/26/17.
@@ -20,41 +20,8 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     @IBOutlet weak var textFieldBottom: UITextField!
     @IBOutlet weak var shareButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
-    
     @IBOutlet weak var toolbar: UIToolbar!
 
-    
-   
-    // MARK: generateMemedImage
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        
-    }
-
-    func generateMemedImage() -> UIImage {
-        
-        // Hide toolbar and navbar
-        configureBars(true)
-        
-        // Render view to an image
-        UIGraphicsBeginImageContext(self.view.frame.size)
-        view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
-        let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        // Show toolbar and navbar
-        configureBars(false)
-        
-        return memedImage
-    }
-    
-    // MARK: configure bars
-    
-    func configureBars(_ input:Bool) {
-        
-       self.navigationController?.isNavigationBarHidden = input
-       self.toolbar.isHidden = input
-
-    }
     
     // MARK: viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
@@ -64,7 +31,7 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         
         shareButton.isEnabled = (pickImageView.image != nil)
         subscribeToKeyboardNotifications()
-
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -86,6 +53,16 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         configureText(textField: textFieldBottom, defaultText: "BOTTOM")
     }
     
+    // MARK: configure bars
+    
+    func configureBars(_ input:Bool) {
+        
+        self.navigationController?.isNavigationBarHidden = input
+        self.toolbar.isHidden = input
+        
+    }
+    
+    
     // MARK: configureText
     
     func configureText(textField: UITextField, defaultText: String) {
@@ -95,44 +72,6 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         textField.text = defaultText
         textField.delegate = self
     }
-    
-    //MARK: pickImageFromAlbum
-    
-    @IBAction func pickImageFromAlbum(_ sender: Any) {
-        pickAnImageFrom(.photoLibrary)
-    }
-    
-    // MARK: pickImageFrom Camera
-    
-    @IBAction func pickImageFromCamera(_ sender: Any) {
-        pickAnImageFrom(.camera)
-    }
-    
-    // MARK: pickImageFrom
-    
-    func pickAnImageFrom(_ source: UIImagePickerControllerSourceType) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.sourceType = source
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    // MARK: imagePickerController
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            self.pickImageView.image = image
-        }
-        dismiss(animated: true, completion: nil)
-    }
-    
-    // MARK: imagePickerControllerDidCancel
-    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        
-        dismiss(animated: true, completion: nil)
-    }
-    
     
     //MARK: textfieldShouldReturn
     
@@ -149,8 +88,45 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSStrokeWidthAttributeName: -5
     ]
+
+    // MARK: imagePickerController
     
-    // MARK:subscribeToKeyboardNotifications
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
+            self.pickImageView.image = image
+        }
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: imagePickerControllerDidCancel
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    // MARK: pickImageFrom
+    
+    func pickAnImageFrom(_ source: UIImagePickerControllerSourceType) {
+        let imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.sourceType = source
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    //MARK: pickImageFromAlbum
+    
+    @IBAction func pickImageFromAlbum(_ sender: Any) {
+        pickAnImageFrom(.photoLibrary)
+    }
+    
+    // MARK: pickImageFrom Camera
+    
+    @IBAction func pickImageFromCamera(_ sender: Any) {
+        pickAnImageFrom(.camera)
+    }
+    
+        // MARK:subscribeToKeyboardNotifications
     func subscribeToKeyboardNotifications() {
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: .UIKeyboardWillShow, object: nil)
@@ -192,15 +168,11 @@ UINavigationControllerDelegate, UITextFieldDelegate {
             textField.text = ""
         }
         
-        if textField == textFieldTop {
+        if textField == self.textFieldTop {
             unsubscribeFromKeyboardNotifications()
         }
-    }
-    
-    // MARK: textFieldDidEndEditing
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField == textFieldTop {
+        
+        if textField == self.textFieldBottom {
             subscribeToKeyboardNotifications()
         }
     }
@@ -224,6 +196,27 @@ UINavigationControllerDelegate, UITextFieldDelegate {
                 self.navigationController?.dismiss(animated: true, completion: nil)
              }
       }
+    
+    
+    // MAR: generate Meme
+    
+    
+    func generateMemedImage() -> UIImage {
+        
+        // Hide toolbar and navbar
+        configureBars(true)
+        
+        // Render view to an image
+        UIGraphicsBeginImageContext(self.view.frame.size)
+        view.drawHierarchy(in: self.view.frame, afterScreenUpdates: true)
+        let memedImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        // Show toolbar and navbar
+        configureBars(false)
+        
+        return memedImage
+    }
     
     // MARK: save meme
 
