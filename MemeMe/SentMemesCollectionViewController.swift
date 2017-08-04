@@ -55,10 +55,9 @@ class SentMemesCollectionViewController: UICollectionViewController {
         // Grab the DetailVC from Storyboard
         let detailController = storyboard!.instantiateViewController(withIdentifier: "MemeDetailViewController") as! MemeDetailViewController
         
-        //Populate view controller with data from the selected item
-        detailController.meme = [memes[(indexPath as IndexPath).row]]
-        
+        detailController.memes = memes[(indexPath as NSIndexPath).row]
+
         // Present the view controller using navigation
         navigationController!.pushViewController(detailController, animated: true)
-    }    
+    }
 }

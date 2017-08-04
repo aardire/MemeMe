@@ -12,12 +12,24 @@ class MemeDetailViewController: UIViewController {
     
     @IBOutlet weak var detailImageView: UIImageView!
     
-    var meme = [Meme]()
-    
+    var memes: Meme!
+
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
-        let currentMeme = meme[0]
-        detailImageView.image = currentMeme.memedImage
+        detailImageView.image = memes.memedImage
+        navigationController?.tabBarController?.tabBar.isHidden = true
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.tabBarController?.tabBar.isHidden = false
+    }
+    
+    // MARK: prepare
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let controller = segue.destination as! MemeEditorViewController
+        controller.memes = self.memes
+    }
+    
 }

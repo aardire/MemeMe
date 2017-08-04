@@ -21,24 +21,22 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     @IBOutlet weak var shareButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     @IBOutlet weak var toolbar: UIToolbar!
-
+    
+    var memes:Meme!
     
     // MARK: viewWillAppear
     override func viewWillAppear(_ animated: Bool) {
         
         super.viewWillAppear(animated)
-        cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
         
         shareButton.isEnabled = (pickImageView.image != nil)
-        subscribeToKeyboardNotifications()
-        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         
         super.viewWillDisappear(animated)
         unsubscribeFromKeyboardNotifications()
-        
+        navigationController?.tabBarController?.tabBar.isHidden = false
     }
     
     // MARK: viewDidLoad
@@ -47,29 +45,36 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        cameraButton.isEnabled = UIImagePickerController.isSourceTypeAvailable(.camera)
+        subscribeToKeyboardNotifications()
+        navigationController?.tabBarController?.tabBar.isHidden = true
         
         
-        configureText(textField: textFieldTop, defaultText: "TOP")
-        configureText(textField: textFieldBottom, defaultText: "BOTTOM")
+        configureText(textField: textFieldTop)
+        configureText(textField: textFieldBottom)
+        
+        textFieldTop.text = memes?.topText
+        textFieldBottom.text = memes?.bottomText
+        pickImageView.image = memes?.originalImage
+
+        
     }
     
     // MARK: configure bars
     
     func configureBars(_ input:Bool) {
         
-        self.navigationController?.isNavigationBarHidden = input
-        self.toolbar.isHidden = input
-        
+        navigationController?.isNavigationBarHidden = input
+        toolbar.isHidden = input
     }
     
     
     // MARK: configureText
     
-    func configureText(textField: UITextField, defaultText: String) {
+    func configureText(textField: UITextField) {
         
         textField.defaultTextAttributes = memeTextAttributes
         textField.textAlignment = .center
-        textField.text = defaultText
         textField.delegate = self
     }
     
@@ -85,7 +90,6 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     let memeTextAttributes:[String:Any] = [
         NSStrokeColorAttributeName: UIColor.black,
         NSForegroundColorAttributeName: UIColor.white,
-        NSFontAttributeName: UIFont(name: "HelveticaNeue-CondensedBlack", size: 40)!,
         NSStrokeWidthAttributeName: -5
     ]
 
@@ -94,7 +98,7 @@ UINavigationControllerDelegate, UITextFieldDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
         if let image = info[UIImagePickerControllerOriginalImage] as? UIImage {
-            self.pickImageView.image = image
+            pickImageView.image = image
         }
         dismiss(animated: true, completion: nil)
     }
@@ -167,12 +171,12 @@ UINavigationControllerDelegate, UITextFieldDelegate {
         if textField.text == "TOP" || textField.text == "BOTTOM" {
             textField.text = ""
         }
-        
-        if textField == self.textFieldTop {
+       
+        if textField == textFieldTop {
             unsubscribeFromKeyboardNotifications()
         }
         
-        if textField == self.textFieldBottom {
+        if textField == textFieldBottom {
             subscribeToKeyboardNotifications()
         }
     }
@@ -233,7 +237,7 @@ UINavigationControllerDelegate, UITextFieldDelegate {
 
     @IBAction func cancel(_ sender: Any) {
         
-        self.navigationController?.dismiss(animated: true, completion: nil)
+        navigationController?.dismiss(animated: true, completion: nil)
         
     }
     
